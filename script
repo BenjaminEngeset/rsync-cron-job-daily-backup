@@ -1,0 +1,16 @@
+ #!/bin/sh
+
+    export PATH=/usr/local/bin:/usr/bin:/bin
+
+    LIST="rootfs usr data data2"
+
+    for d in $LIST; do
+	mount /backup/$d
+	rsync -ax --exclude fstab --delete /$d/ /backup/$d/
+	umount /backup/$d
+    done
+
+    DAY=`date "+%A"`
+    
+    rsync -a --delete /usr/local/apache /data2/backups/$DAY
+    rsync -a --delete /data/solid /data2/backups/$DAY
